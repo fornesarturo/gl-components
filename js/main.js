@@ -60,7 +60,7 @@ function createComponents(gl)
 	// Set its render function
 	triangle2.setRender(function () {
 		var triangleSelf = triangle2.getSelf()
-		var gl = triangle.getGL()
+		var gl = triangle2.getGL()
 		triangleSelf.useProgram("shaderB")
 		triangleSelf.setupAttribute("aPosition", "vboPositionA", 2, gl.FLOAT, false, 0, 0)
 		triangleSelf.drawArrays(gl.LINE_LOOP, 0, 3)

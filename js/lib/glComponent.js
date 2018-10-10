@@ -6,12 +6,7 @@
     {
       gl: gl,
       shaders: {
-        shaderA: {
-          vertexShader: vs, // pass as a string, e.g. document.getElementById("shader-vs").text
-          fragmentShader: fs, // pass as a string, e.g. document.getElementById("shader-fs").text;
-          attributes: ["attribA", "attribB"], 
-          uniforms: ["uniformA", "uniformB"] 
-        },
+        shaderA: new glShader()
         ...
       },
       buffers: {
@@ -31,37 +26,37 @@ function glComponent ({ gl, shaders, buffers, data }) {
     self.shaders = Object.assign({}, shaders)
     self.data = Object.assign({}, data)
     self.buffers = Object.assign({}, buffers)
-    for (shaderName in shaders) {
-      if (!shaders.hasOwnProperty(shaderName)) continue
-      self.initShader(shaderName)
-    }
+    // for (shaderName in shaders) {
+    //   if (!shaders.hasOwnProperty(shaderName)) continue
+    //   self.initShader(shaderName)
+    // }
     for (bufferName in buffers) {
       if (!buffers.hasOwnProperty(bufferName)) continue
       self.initBuffer(bufferName)
     }
   }
 
-  self.initShader = function (shaderName) {
-    // Create GLSL shaders (upload source & compile shaders)
-    var vertexShader = createShader(gl, gl.VERTEX_SHADER, self.shaders[shaderName].vertexShader)
-    var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, self.shaders[shaderName].fragmentShader)
+  // self.initShader = function (shaderName) {
+  //   // Create GLSL shaders (upload source & compile shaders)
+  //   var vertexShader = createShader(gl, gl.VERTEX_SHADER, self.shaders[shaderName].vertexShader)
+  //   var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, self.shaders[shaderName].fragmentShader)
 
-    // Link the two shaders into a shader program
-    // Store program in shader object
-    self.shaders[shaderName].shaderProgram = createShaderProgram(gl, vertexShader, fragmentShader)
+  //   // Link the two shaders into a shader program
+  //   // Store program in shader object
+  //   self.shaders[shaderName].shaderProgram = createShaderProgram(gl, vertexShader, fragmentShader)
 
-    self.shaders[shaderName].attributeLocations = {}
-    self.shaders[shaderName].uniformLocations = {}
-    // Look up into the vertex shader where the CPU's vertex data go
-    // For each attribute
-    for (attribute of self.shaders[shaderName].attributes) {
-      self.shaders[shaderName].attributeLocations[toString(attribute)] = gl.getAttribLocation(self.shaders[shaderName].shaderProgram, toString(attribute))
-    }
-    // For each uniform
-    for (uniform of self.shaders[shaderName].uniforms) {
-      self.shaders[shaderName].uniformLocations[toString(uniform)] = gl.getUniformLocation(self.shaders[shaderName].shaderProgram, toString(uniform))
-    }
-  }
+  //   self.shaders[shaderName].attributeLocations = {}
+  //   self.shaders[shaderName].uniformLocations = {}
+  //   // Look up into the vertex shader where the CPU's vertex data go
+  //   // For each attribute
+  //   for (attribute of self.shaders[shaderName].attributes) {
+  //     self.shaders[shaderName].attributeLocations[toString(attribute)] = gl.getAttribLocation(self.shaders[shaderName].shaderProgram, toString(attribute))
+  //   }
+  //   // For each uniform
+  //   for (uniform of self.shaders[shaderName].uniforms) {
+  //     self.shaders[shaderName].uniformLocations[toString(uniform)] = gl.getUniformLocation(self.shaders[shaderName].shaderProgram, toString(uniform))
+  //   }
+  // }
 
   self.initBuffer = function (bufferName) {
     self.buffers[bufferName].vbo = gl.createBuffer()
@@ -78,7 +73,7 @@ function glComponent ({ gl, shaders, buffers, data }) {
   // Receives shader name as a string as it was passed in the
   // shaders object.
   self.useProgram = function (shaderName) {
-    gl.useProgram(self.shaders[shaderName].shaderProgram)
+    self.shaders[shaderName].use()
     self.currentProgram = shaderName
   }
 

@@ -2,17 +2,20 @@
 
 function createComponents(gl)
 {
+	var shaderA = new glShader({
+		gl: gl,
+		vertexShader: document.getElementById("shader-vs").text,
+		fragmentShader: document.getElementById("shader-fs").text,
+		attributes: ["aPosition"],
+		uniforms: []
+	})
+
 	var components = []
 	// Create Triangle object
 	var triangle = new glComponent({
 		gl: gl,
 		shaders: {
-			shaderA: {
-				vertexShader: document.getElementById("shader-vs").text,
-				fragmentShader: document.getElementById("shader-fs").text,
-				attributes: ["aPosition"],
-				uniforms: []
-			}
+			"shaderA": shaderA
 		},
 		buffers: {
 			vboPosition: {
@@ -38,12 +41,7 @@ function createComponents(gl)
 	var triangle2 = new glComponent({
 		gl: gl,
 		shaders: {
-			shaderB: {
-				vertexShader: document.getElementById("shader-vs").text,
-				fragmentShader: document.getElementById("shader-fs").text,
-				attributes: ["aPosition"],
-				uniforms: []
-			}
+			"shaderB": shaderA
 		},
 		buffers: {
 			vboPositionA: {

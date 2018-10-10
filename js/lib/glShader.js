@@ -4,37 +4,42 @@
 //     attributes: ["attribA", "attribB"],
 //     uniforms: ["uniformA", "uniformB"]
 // }
-function glShader({ gl, vertexShader, fragmentShader, attributes, uniforms }) {
+class GlShader {
 
-    var self = this
-
-    self.init = function () {
+    constructor ({ gl, vertexShader, fragmentShader, attributes, uniforms }) {
+        this.gl = gl
         // Create GLSL shaders (upload source & compile shaders)
-        var t_vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShader)
-        var t_fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShader)
+        var t_vertexShader = createShader(this.gl, this.gl.VERTEX_SHADER, vertexShader)
+        var t_fragmentShader = createShader(this.gl, this.gl.FRAGMENT_SHADER, fragmentShader)
 
         // Link the two shaders into a shader program
         // Store program in shader object
-        self.shaderProgram = createShaderProgram(gl, t_vertexShader, t_fragmentShader)
+        this.shaderProgram = createShaderProgram(this.gl, t_vertexShader, t_fragmentShader)
 
-        self.attributeLocations = {}
-        self.uniformLocations = {}
+        this.attributeLocations = {}
+        this.uniformLocations = {}
         // Look up into the vertex shader where the CPU's vertex data go
         // For each attribute
-        for (attribute of attributes) {
-            self.attributeLocations[toString(attribute)] = gl.getAttribLocation(self.shaderProgram, toString(attribute))
+        for (var attribute of attributes) {
+            this.attributeLocations[toString(attribute)] = this.gl.getAttribLocation(this.shaderProgram, toString(attribute))
         }
         // For each uniform
-        for (uniform of uniforms) {
-            self.uniformLocations[toString(uniform)] = gl.getUniformLocation(self.shaderProgram, toString(uniform))
+        for (var uniform of uniforms) {
+            this.uniformLocations[toString(uniform)] = this.gl.getUniformLocation(this.shaderProgram, toString(uniform))
         }
     }
 
-    self.use = function () {
-        gl.useProgram(self.shaderProgram)
+    enableVertexAttribArray (attribute) {
+        this.gl.enableVertexAttribArray(this.attributeLocations[attribute]);
     }
 
-    self.init()
+    vertexAttribPointer (attribute, size, type, normalize, stride, offset) {
+        this.gl.vertexAttribPointer(this.attributeLocations[attribute], size, type, normalize, stride, offset);
+    }
+
+    use () {
+        this.gl.useProgram(this.shaderProgram)
+    }
 }
 
 function createShader(gl, type, source) {

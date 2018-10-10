@@ -2,7 +2,7 @@
 
 function createComponents(gl)
 {
-	var shaderA = new glShader({
+	var shaderA = new GlShader({
 		gl: gl,
 		vertexShader: document.getElementById("shader-vs").text,
 		fragmentShader: document.getElementById("shader-fs").text,
@@ -12,20 +12,21 @@ function createComponents(gl)
 
 	var components = []
 	// Create Triangle object
-	var triangle = new glComponent({
+	var triangle = new GlComponent({
 		gl: gl,
 		shaders: {
 			"shaderA": shaderA
 		},
 		buffers: {
-			vboPosition: {
+			vboPosition: new GlBuffer({
+				gl: gl,
 				type: Float32Array,
 				initialData: [
 					0., 0.5, 		// V0
 					-0.5, -0.5, // v1
 					0.5, -0.5		// V2
 				]
-			}
+			})
 		},
 		data: {}
 	})
@@ -38,20 +39,21 @@ function createComponents(gl)
 		triangleSelf.drawArrays(gl.LINE_LOOP, 0, 3)
 	})
 
-	var triangle2 = new glComponent({
+	var triangle2 = new GlComponent({
 		gl: gl,
 		shaders: {
 			"shaderB": shaderA
 		},
 		buffers: {
-			vboPositionA: {
+			vboPositionA: new GlBuffer({
+				gl: gl,
 				type: Float32Array,
 				initialData: [
 					0., 0.25, 		// V0
 					-0.25, -0.25, // v1
 					0.25, -0.25		// V2
 				]
-			}
+			})
 		},
 		data: {}
 	})
@@ -72,7 +74,7 @@ function createComponents(gl)
 
 function main()
 {
-	var mainApp = new glApp({ canvas: "canvas", clearColor: [0., 0., 0., 1.], animate: false })
+	var mainApp = new GlApp({ canvas: "canvas", clearColor: [0., 0., 0., 1.], animate: false })
 	if (!mainApp.gl) return
 
 	var components = createComponents(mainApp.gl)

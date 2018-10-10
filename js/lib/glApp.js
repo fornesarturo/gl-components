@@ -1,50 +1,46 @@
-function glApp ({ canvas, clearColor, animate, data }) {
-  
-  var self = this
+class GlApp {
 
-  self.init = function () {
-    self.data = Object.assign({}, data)
-    self.animate = animate
-    self.components = []
+  constructor ({ canvas, clearColor, animate, data }) {
+    this.data = Object.assign({}, data)
+    this.animate = animate
+    this.components = []
     // Get a WebGL Context.
-    self.canvas = document.getElementById(canvas)
-    self.gl = self.canvas.getContext("webgl")
+    this.canvas = document.getElementById(canvas)
+    this.gl = this.canvas.getContext("webgl")
     // Handle error by not performing any more tasks.
-    if (!self.gl) return console.log("Error getting webgl")
+    if (!this.gl) return console.log("Error getting webgl")
     // Set the clear color
-    self.gl.clearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3])
+    this.gl.clearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3])
   }
 
-  self.pauseAnimation = function () {
-    self.animate = false
+  pauseAnimation () {
+    this.animate = false
   }
 
-  self.resumeAnimation = function () {
-    self.animate = true
-    self.run()
+  resumeAnimation () {
+    this.animate = true
+    this.run()
   }
 
-  self.addComponent = function (component) {
-    self.components.push(component);
+  addComponent (component) {
+    this.components.push(component);
   }
 
-  self.addComponents = function (components) {
-    self.components = self.components.concat(components)
+  addComponents (components) {
+    this.components = this.components.concat(components)
   }
 
-  self.run = function () {
-    self.gl.clear(self.gl.COLOR_BUFFER_BIT);
+  run () {
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     // Mapping from clip-space coords to the viewport in pixels
-    self.gl.viewport(0, 0, self.canvas.width, self.canvas.height);
-    // Tell each component to render itself
-    for (component of self.components) {
+    this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    // Tell each component to render itthis
+    for (var component of this.components) {
       component.render()
     }
     // Animate if needed
-    if (self.animate) {
-      requestAnimationFrame(self.run)
+    if (this.animate) {
+      requestAnimationFrame(this.run)
     }
   }
-
-  self.init()
 }

@@ -21,7 +21,7 @@ class GlShader {
         // Look up into the vertex shader where the CPU's vertex data go
         // For each attribute
         for (var attribute of attributes) {
-            this.attributeLocations[toString(attribute)] = this.gl.getAttribLocation(this.shaderProgram, toString(attribute))
+            this.attributeLocations[attribute] = this.gl.getAttribLocation(this.shaderProgram, attribute)
         }
         // For each uniform
         for (var uniform of uniforms) {

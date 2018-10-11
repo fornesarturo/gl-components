@@ -25,7 +25,7 @@ class GlShader {
         }
         // For each uniform
         for (var uniform of uniforms) {
-            this.uniformLocations[toString(uniform)] = this.gl.getUniformLocation(this.shaderProgram, toString(uniform))
+            this.uniformLocations[uniform] = this.gl.getUniformLocation(this.shaderProgram, uniform)
         }
     }
 

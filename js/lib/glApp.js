@@ -31,16 +31,18 @@ class GlApp {
   }
 
   run () {
+    var self = this;
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     // Mapping from clip-space coords to the viewport in pixels
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
     // Tell each component to render itthis
     for (var component of this.components) {
+      component.update()
       component.render()
     }
     // Animate if needed
     if (this.animate) {
-      requestAnimationFrame(this.run)
+      requestAnimationFrame(function () { self.run(); })
     }
   }
 }
